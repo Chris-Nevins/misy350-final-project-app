@@ -54,3 +54,4 @@ source .venv/bin/activate
 pip install -r requirements.txt
 streamlit run app.py
 ```
+# misy350-final-project-app
