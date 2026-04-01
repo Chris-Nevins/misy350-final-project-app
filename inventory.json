@@ -1,0 +1,107 @@
+[
+    {
+        "id": 1,
+        "name": "Intel Core i7-13700K CPU",
+        "category": "Processor",
+        "price": 389.99,
+        "stock": 15
+    },
+    {
+        "id": 2,
+        "name": "AMD Ryzen 7 7800X3D CPU",
+        "category": "Processor",
+        "price": 449.99,
+        "stock": 12
+    },
+    {
+        "id": 3,
+        "name": "NVIDIA RTX 4070 Graphics Card",
+        "category": "GPU",
+        "price": 599.99,
+        "stock": 8
+    },
+    {
+        "id": 4,
+        "name": "AMD Radeon RX 7800 XT",
+        "category": "GPU",
+        "price": 499.99,
+        "stock": 10
+    },
+    {
+        "id": 5,
+        "name": "Corsair Vengeance 16GB DDR5 RAM",
+        "category": "Memory",
+        "price": 89.99,
+        "stock": 25
+    },
+    {
+        "id": 6,
+        "name": "G.Skill Trident Z 32GB DDR5 RAM",
+        "category": "Memory",
+        "price": 169.99,
+        "stock": 18
+    },
+    {
+        "id": 7,
+        "name": "Samsung 980 Pro 1TB SSD",
+        "category": "Storage",
+        "price": 109.99,
+        "stock": 20
+    },
+    {
+        "id": 8,
+        "name": "WD Black 2TB HDD",
+        "category": "Storage",
+        "price": 79.99,
+        "stock": 14
+    },
+    {
+        "id": 9,
+        "name": "ASUS ROG Strix B650 Motherboard",
+        "category": "Motherboard",
+        "price": 229.99,
+        "stock": 9
+    },
+    {
+        "id": 10,
+        "name": "MSI MAG Z790 Tomahawk Motherboard",
+        "category": "Motherboard",
+        "price": 259.99,
+        "stock": 7
+    },
+    {
+        "id": 11,
+        "name": "Corsair RM850x Power Supply",
+        "category": "Power Supply",
+        "price": 149.99,
+        "stock": 13
+    },
+    {
+        "id": 12,
+        "name": "NZXT H510 Mid Tower Case",
+        "category": "Case",
+        "price": 99.99,
+        "stock": 11
+    },
+    {
+        "id": 13,
+        "name": "Noctua NH-D15 CPU Cooler",
+        "category": "Cooling",
+        "price": 109.99,
+        "stock": 10
+    },
+    {
+        "id": 14,
+        "name": "Cooler Master ML240 Liquid Cooler",
+        "category": "Cooling",
+        "price": 129.99,
+        "stock": 9
+    },
+    {
+        "id": 15,
+        "name": "TP-Link WiFi 6 PCIe Card",
+        "category": "Networking",
+        "price": 49.99,
+        "stock": 16
+    }
+]
