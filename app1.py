@@ -78,92 +78,94 @@ if st.session_state["role"] == "Employee":
                         st.markdown(f"Type: **{selected_item['type']}**")
 
         with tab2:
-            st.markdown("## Add New Assignment")
+            #st.markdown("## Add New Assignment")
             #st.markdown("### Add New Assignment")
 
-            title = st.text_input("Title")
-            description = st.text_area("Description",placeholder="normalization is covered here",
+            #title = st.text_input("Title")
+            #description = st.text_area("Description",placeholder="normalization is covered here",
                                     help="Here you are entering the assignment details")
-            points = st.number_input("Points")
+            #points = st.number_input("Points")
 
             #assignment_type = st.text_input("Assignment Type")
-            assignment_type = st.radio("Type", ("Homework", "Lab"), horizontal=True)
-            testing = st.text("Homework Type")
-            assignment_type2 = st.selectbox("Type", ("Select an option","Homework", "Lab", "other"))
-            if assignment_type2 == "other":
-                assignment_type2 = st.text_input("Type", placeholder="Enter the assignment Type")
+            #assignment_type = st.radio("Type", ("Homework", "Lab"), horizontal=True)
+            #testing = st.text("Homework Type")
+            #assignment_type2 = st.selectbox("Type", ("Select an option","Homework", "Lab", "other"))
+            #if assignment_type2 == "other":
+                #assignment_type2 = st.text_input("Type", placeholder="Enter the assignment Type")
 
-            due_date = st.date_input("Due Date")
+            #due_date = st.date_input("Due Date")
 
-            btn_save = st.button("Save", width="stretch", disabled=False)
+            #btn_save = st.button("Save", width="stretch", disabled=False)
 
-            if btn_save:
-                if not title:
-                    st.warning("Title needs to be provided!")
-                else:
-                    with st.spinner("Assignment is being reached....."):
-                        time.sleep(5)
+            #if btn_save:
+                #if not title:
+                    #st.warning("Title needs to be provided!")
+                #else:
+                    #with st.spinner("Assignment is being reached....."):
+                        #time.sleep(5)
 
                         #new_assignment_id = "HW" + str(next_assignment_id_number)
                         #next_assignment_id_number += 1
 
-                        assignments.append(
-                            {
-                                "id":str(uuid.uuid4()),
-                                "title": title,
-                                "description": description,
-                                "points": points,
-                                "type": assignment_type
-                            }
-                        )
+                        #assignments.append(
+                            #{
+                                #"id":str(uuid.uuid4()),
+                                #"title": title,
+                                #"description": description,
+                                #"points": points,
+                                #"type": assignment_type
+                            #}
+                        #)
 
                         #record into json file
-                        with json_path_assignment.open("w",encoding="utf-8") as f:
-                            json.dump(assignments,f)
+                        #with json_path_assignment.open("w",encoding="utf-8") as f:
+                            #json.dump(assignments,f)
 
-                        st.success("New Assignement is recorded!")
-                        st.info("This is a new assignment")
-                        time.sleep(4)
+                        #st.success("New Assignement is recorded!")
+                        #st.info("This is a new assignment")
+                        #time.sleep(4)
                         #st.dataframe(assignments)
-                        st.rerun()
+                        #st.rerun()
+            st.empty()
 
         with tab3:
-            st.markdown("## Update an Assignment")
-            titles = []
+            #st.markdown("## Update an Assignment")
+            #titles = []
 
-            for assignment in assignments:
-                titles.append(assignment['title'])
+            #for assignment in assignments:
+                #titles.append(assignment['title'])
 
-            selected_item = st.selectbox("Select an assignment", titles, key="selected_title_edit")
+            #selected_item = st.selectbox("Select an assignment", titles, key="selected_title_edit")
 
-            assignment_edit = {}
-            for assignment in assignments:
-                if assignment['title'] == selected_item:
-                    assignment_edit = assignment
-                    break
+            #assignment_edit = {}
+            #for assignment in assignments:
+                #if assignment['title'] == selected_item:
+                    #assignment_edit = assignment
+                    #break
 
-            if assignment_edit:
-                edit_title = st.text_input("Title", key=f"edit_title_{assignment_edit['id']}", value= assignment_edit['title'])
-                edit_description = st.text_area("Description", key=f"edit_description_{assignment_edit['id']}", value= assignment_edit['description'])
+            #if assignment_edit:
+                #edit_title = st.text_input("Title", key=f"edit_title_{assignment_edit['id']}", value= assignment_edit['title'])
+                #edit_description = st.text_area("Description", key=f"edit_description_{assignment_edit['id']}", value= assignment_edit['description'])
 
-                type_options = ['Homework', 'Lab']
-                selected_index = type_options.index(assignment_edit["type"])
+                #type_options = ['Homework', 'Lab']
+                #selected_index = type_options.index(assignment_edit["type"])
 
-                edit_type = st.radio("Type", type_options, key=f"edit_type_{assignment_edit['id']}", index= selected_index)
+                #edit_type = st.radio("Type", type_options, key=f"edit_type_{assignment_edit['id']}", index= selected_index)
 
-            btn_update = st.button("Update", key="update_button", type="secondary", use_container_width=True)
-            if btn_update:
-                with st.spinner("Updating..."):
-                    time.sleep(5)
-                    assignment_edit["title"] = edit_title
-                    assignment_edit["description"] = edit_description
+            #btn_update = st.button("Update", key="update_button", type="secondary", use_container_width=True)
+            #if btn_update:
+                #with st.spinner("Updating..."):
+                    #time.sleep(5)
+                    #assignment_edit["title"] = edit_title
+                    #assignment_edit["description"] = edit_description
 
-                    with json_path.open("w") as f:
-                        json.dump(assignments,f)
+                    #with json_path.open("w") as f:
+                        #json.dump(assignments,f)
 
-                    st.success("Assignment is updated!")
-                    time.sleep(5)
-                    st.rerun()
+                    #st.success("Assignment is updated!")
+                    #time.sleep(5)
+                    #st.rerun()
+            st.empty()
 
 elif st.session_state["role"] == "Admin":
     st.markdown("Welcome! This is the Admin dashboard")
