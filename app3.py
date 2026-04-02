@@ -1,7 +1,7 @@
 import streamlit as st
 from datetime import datetime
 import json
-from pathlib import Path
+from pathlib import Path 
 
 json_file = Path("inventory.json")
 

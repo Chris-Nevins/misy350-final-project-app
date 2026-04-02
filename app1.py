@@ -51,31 +51,32 @@ if st.session_state["role"] == "Employee":
 
         with tab1:
 
-            tab_option = st.radio("View/Search", ["View", "Search"], horizontal=True)
-            if tab_option == "View":
-                st.dataframe(inventory)
-            else:
-                names = []
-                for item in inventory:
-                    names.append(inventory["name"])
+            #tab_option = st.radio("View/Search", ["View", "Search"], horizontal=True)
+            #if tab_option == "View":
+                #st.dataframe(inventory)
+            #else:
+                #names = []
+                #for item in inventory:
+                    #names.append(inventory["name"])
 
-                selected_name = st.selectbox("Select a title", names, key="selected_title")
+                #selected_name = st.selectbox("Select a title", names, key="selected_title")
 
-                selected_item = {}
+                #selected_item = {}
 
-                for item in inventory:
-                    if item['title'] == selected_name:
-                        selected_item = item
-                        break
+                #for item in inventory:
+                    #if item['title'] == selected_name:
+                        #selected_item = item
+                        #break
                 
-                st.divider()
-                selected_item = st.selectbox("Select Title", options=inventory, format_func=lambda x: f"{x['title']} ({x['type']})")
+                #st.divider()
+                #selected_item = st.selectbox("Select Title", options=inventory, format_func=lambda x: f"{x['title']} ({x['type']})")
 
-                if selected_item:
-                    with st.expander("Assignment Details", expanded=True):
-                        st.markdown(f"### Title: {selected_item['name']}")
-                        st.markdown(f"Description: {selected_item['description']}")
-                        st.markdown(f"Type: **{selected_item['type']}**")
+                #if selected_item:
+                    #with st.expander("Assignment Details", expanded=True):
+                        #st.markdown(f"### Title: {selected_item['name']}")
+                        #st.markdown(f"Description: {selected_item['description']}")
+                        #st.markdown(f"Type: **{selected_item['type']}**")
+            st.empty()
 
         with tab2:
             #st.markdown("## Add New Assignment")
