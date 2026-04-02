@@ -8,6 +8,19 @@ import time
 st.set_page_config(page_title="Precision Hardware", layout="centered")
 st.title("Precision Hardware")
 
+#=============================
+# A. User Registration 
+#=============================
+
+#=============================
+# B. Session State Management
+#=============================
+
+#=============================
+# C. Role-Based Routing
+#=============================
+
+
 if "logged_in" not in st.session_state:
     st.session_state["logged_in"] = False
 
