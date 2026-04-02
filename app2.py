@@ -5,19 +5,13 @@ from datetime import datetime
 import uuid
 import time
 
-st.set_page_config("Orders Management App", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config("Inventory Management App", layout="wide", initial_sidebar_state="expanded")
 
 
 if "page" not in st.session_state:
     st.session_state["page"] = "home"
 
-inventory = [
-    {"id": 1, "name": "Espresso", "price": 2.50, "stock": 40},
-    {"id": 2, "name": "Latte", "price": 4.25, "stock": 25},
-    {"id": 3, "name": "Cold Brew", "price": 3.75, "stock": 30},
-    {"id": 4, "name": "Mocha", "price": 4.50, "stock": 20},
-    {"id": 5, "name": "Blueberry Muffin", "price": 2.95, "stock": 18}
-]
+inventory = []
 
 with st.sidebar:
     if st.button("Home", key="home_btn", type="primary", use_container_width=True):
@@ -41,7 +35,7 @@ else:
     orders = []
 
 if st.session_state["page"] == "home":
-    st.markdown("# Orders Management Application = Home Page")
+    st.markdown("# Inventory Management Application = Home Page")
     col1, col2 = st.columns([4,2])
     with col1:
         selected_category = st.radio("Select a List", ["Inventory", "Orders"], horizontal=True)
