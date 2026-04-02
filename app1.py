@@ -5,8 +5,8 @@ from datetime import datetime
 import uuid
 import time
 
-st.set_page_config(page_title="Course Manager", layout="centered")
-st.title("Course Manager App")
+st.set_page_config(page_title="Precision Hardware", layout="centered")
+st.title("Precision Hardware")
 
 if "logged_in" not in st.session_state:
     st.session_state["logged_in"] = False
@@ -20,16 +20,7 @@ if "role" not in st.session_state:
 if "page" not in st.session_state:
     st.session_state["page"] = "login"
 
-users = [
-    {
-    "id":"1",
-    "email":"admin@school.edu",
-    "full_name":"System Admin",
-    "password":"123ssag@43AE",
-    "role":"Admin",
-    "registerd_at":"..."
-    }
-]
+users = []
 
 json_path = Path("users.json")
 if json_path.exists():
@@ -37,68 +28,54 @@ if json_path.exists():
         users = json.load(f)
 
 #load data
-assignments = [
-    {
-        "id":"HW1",
-        "title":"intro to database",
-        "description":"basics of database design",
-        "points":100,
-        "type":"homework"
-    },
-    {
-        "id":"HW2",
-        "title":"Normalization",
-        "description":"normalizing",
-        "points":100,
-        "type":"homework"
-    }
-]
-json_path_assignment = Path("assignments.json")
+inventory = []
+
+json_path_inventory = Path("inventory.json")
 
 #load the data from a json file
-if json_path_assignment.exists():
-    with json_path_assignment.open("r", encoding= "utf-8") as f:
-        assignments = json.load(f)
+if json_path_inventory.exists():
+    with json_path_inventory.open("r", encoding= "utf-8") as f:
+        inventory = json.load(f)
 
 
-if st.session_state["role"] == "Instructor":
+if st.session_state["role"] == "Employee":
     if st.session_state["page"] == "home":
-        st.markdown("Welcome! This is the instructor dashboard")
+        st.markdown("Welcome! This is the employee dashboard")
         if st.button("Go to Dashboard", key= "dashboard_view_btn", type= "primary", use_container_width=True):
             st.session_state["page"] = "dashboard"
             st.rerun()
     elif st.session_state["page"] == "dashboard":
         st.markdown("Dashboard")
 
-        tab1, tab2, tab3 = st.tabs(["View Assignments", "Add New Assignment", "Update An Assignement"])
+        tab1, tab2, tab3 = st.tabs(["Catalog", "Daily Sales", "Inventory"])
 
         with tab1:
 
             tab_option = st.radio("View/Search", ["View", "Search"], horizontal=True)
             if tab_option == "View":
-                st.dataframe(assignments)
+                st.dataframe(inventory)
             else:
-                titles = []
-                for assignment in assignments:
-                    titles.append(assignment["title"])
+                names = []
+                for item in inventory:
+                    names.append(inventory["name"])
 
-                selected_title = st.selectbox("Select a title", titles, key="selected_title")
+                selected_name = st.selectbox("Select a title", names, key="selected_title")
 
-                selected_assignement = {}
+                selected_item = {}
 
-                for assignment in assignments:
-                    if assignment['title'] == selected_title:
-                        selected_assignement = assignment
+                for item in inventory:
+                    if item['title'] == selected_name:
+                        selected_item = item
                         break
                 
                 st.divider()
-                selected_assignement = st.selectbox("Select Title", options=assignments, format_func=lambda x: f"{x['title']} ({x['type']})")
+                selected_item = st.selectbox("Select Title", options=inventory, format_func=lambda x: f"{x['title']} ({x['type']})")
 
-                if selected_assignement:
+                if selected_item:
                     with st.expander("Assignment Details", expanded=True):
-                        st.markdown(f"### Title: {selected_assignement['title']}")
-                        st.markdown(f"Description: {selected_assignement['description']}")
-                        st.markdown(f"Type: **{selected_assignement['type']}**")
+                        st.markdown(f"### Title: {selected_item['name']}")
+                        st.markdown(f"Description: {selected_item['description']}")
+                        st.markdown(f"Type: **{selected_item['type']}**")
 
         with tab2:
             st.markdown("## Add New Assignment")
