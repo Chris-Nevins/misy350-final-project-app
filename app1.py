@@ -208,8 +208,8 @@ else:
                 else:
                     st.error("Invalid credentials")
 
-    # --- REGISTRATION ---
-    st.subheader("New Instructor Account")
+    # Registration
+    st.subheader("Create a New account")
     with st.container(border=True):
         new_email = st.text_input("Email", key="email_register")
         new_password = st.text_input("Password", type="password", key="password_edit")
@@ -237,7 +237,7 @@ else:
 
 
 with st.sidebar:
-    st.markdown("Course Manager Sidebar")
+    st.markdown("Inventory Manager Sidebar")
     if st.session_state["logged_in"] == True:
         user = st.session_state["user"]
         st.markdown(f"Logged User Email: {user["email"]}")
