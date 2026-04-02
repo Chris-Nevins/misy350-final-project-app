@@ -12,7 +12,28 @@ st.title("Precision Hardware")
 # A. User Registration & Login
 #=============================
 
-users = []
+if "logged_in" not in st.session_state:
+    st.session_state["logged_in"] = False
+
+if "user" not in st.session_state:
+    st.session_state["user"] = None
+
+if "role" not in st.session_state:
+    st.session_state["role"] = None
+
+if "page" not in st.session_state:
+    st.session_state["page"] = "login"
+
+users = [
+    {
+    "id":"1",
+    "email":"admin@school.edu",
+    "full_name":"System Admin",
+    "password":"123ssag@43AE",
+    "role":"Admin",
+    "registerd_at":"..."
+    }
+]
 
 json_path = Path("users.json")
 if json_path.exists():
@@ -49,7 +70,7 @@ with st.container(border=True):
                 st.error("Invalid credentials")
 
 # Registration
-st.subheader("New Instructor Account")
+st.subheader("Create a New account")
 with st.container(border=True):
     new_email = st.text_input("Email", key="email_register")
     new_password = st.text_input("Password", type="password", key="password_edit")
@@ -71,8 +92,6 @@ with st.container(border=True):
             st.success("Account created!")
             st.rerun()
 
-st.write("---")
-st.dataframe(users)
 #=============================
 # B. Session State Management
 #=============================
