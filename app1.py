@@ -83,7 +83,7 @@ if st.session_state["role"] == "Employee":
 
             #title = st.text_input("Title")
             #description = st.text_area("Description",placeholder="normalization is covered here",
-                                    help="Here you are entering the assignment details")
+                                    #help="Here you are entering the assignment details")
             #points = st.number_input("Points")
 
             #assignment_type = st.text_input("Assignment Type")
@@ -167,8 +167,8 @@ if st.session_state["role"] == "Employee":
                     #st.rerun()
             st.empty()
 
-elif st.session_state["role"] == "Admin":
-    st.markdown("Welcome! This is the Admin dashboard")
+elif st.session_state["role"] == "Owner":
+    st.markdown("Welcome! This is the Owner dashboard")
 
     if st.button("Log out", type="primary", use_container_width=True):
         st.session_state["logged_in"] = False
