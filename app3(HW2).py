@@ -17,21 +17,22 @@ else:
 st.set_page_config(page_title="Smart Coffee Kiosk", layout="centered")
 st.title("Smart Coffee Kiosk App")
 
-orders = [
+products = [
     {
-    "order_id": "Order_101", 
-    "customer": "John", 
-    "item": "Cold Brew", 
-    "total": 8.50, 
-    "status": "Placed"
+    "product_id": "product_101", 
+    "item": "AMD Ryzen 7 7800X3D CPU",
+    "category": "Processor", 
+    "total": 1350,
+    "user_type": "Owner",
+    "status": "Changed"
     }
 ]
 
-if "orders" not in st.session_state:
-    st.session_state["orders"] = orders
+if "products" not in st.session_state:
+    st.session_state["products"] = products
 
-# Section 1: Place Order (Create)
-if st.header("Place Order"):
+# Section 1: Add New Product (Create)
+if st.header("Add New Product"):
     with st.container(border=True):
         item_names = []
         for item in inventory:
@@ -45,11 +46,11 @@ if st.header("Place Order"):
                 break
 
         Quantity = st.number_input("Insert quantity", placeholder= "Please enter amount", step=1)
-        Customer_Name = st.text_input("Customer Name", placeholder= "Name")
+        User_Type = st.text_input("Type of User", placeholder= "Name")
 
-        btn_order = st.button("Submit Order")
-        if btn_order:
-            if not Customer_Name:
+        btn_change = st.button("Submit Change")
+        if btn_change:
+            if not User_Type:
                 st.error("Please enter your name")
             elif selected_name is None:
                 st.error("Please select an item")
@@ -65,31 +66,31 @@ if st.header("Place Order"):
 
                 total_price = selected_name["price"] * Quantity
 
-                new_order_id = f"Order_{len(st.session_state['orders']) + 101}"
+                new_product_id = f"Product_{len(st.session_state['products']) + 101}"
 
-                new_order = {
-                    "order_id":new_order_id,
-                    "customer":Customer_Name,
+                new_product = {
+                    "product_id":new_product_id,
                     "item":selected_name["name"],
+                    "user_type":User_Type,
                     "total":("{:.2f}".format(total_price)),
-                    "status":"Placed"
+                    "status":"Changed"
                 }
-                orders.append(new_order)
+                products.append(new_product)
 
-                st.session_state["orders"].append(new_order)
+                st.session_state["products"].append(new_product)
 
-                st.success("Order Placed")
+                st.success("Product Changed")
 
                 with st.expander("View Receipt"):
-                    st.write(f"Order ID: {new_order['order_id']}")
-                    st.write(f"Customer: {new_order['customer']}")
-                    st.write(f"Item: {new_order['item']}")
-                    st.write(f"Total: {new_order['total']}")
-                    st.write(f"Status: {new_order['status']}")
+                    st.write(f"Product ID: {new_product['product_id']}")
+                    st.write(f"Item: {new_product['item']}")
+                    st.write(f"Type of User: {new_product['user_type']}")
+                    st.write(f"Total: {new_product['total']}")
+                    st.write(f"Status: {new_product['status']}")
 
 
-# Section 2: View & Search Inventory (Read)
-st.header("View & Search Inventory")
+# Section 2: Update Prices (Read)
+st.header("Update Prices")
 with st.container(border=True):
     search = st.text_input("Search", placeholder= "filter items by name")
     filtered_inventory = []
@@ -114,18 +115,18 @@ with st.container(border=True):
         else:
             st.success("All items are in sufficient stock")
         
-        matching_orders = []
-        for order in st.session_state["orders"]:
+        matching_products = []
+        for product in st.session_state["products"]:
             for item in filtered_inventory:
-                if order["item"] == item["name"]:
-                    matching_orders.append(order)        
+                if product["item"] == item["name"]:
+                    matching_products.append(product)        
                     break
 
-        if matching_orders:
-            st.subheader("Order(s) for matching item(s)")
-            st.dataframe(matching_orders, use_container_width= True)
+        if matching_products:
+            st.subheader("Product(s) for matching item(s)")
+            st.dataframe(matching_products, use_container_width= True)
         else:
-            st.info("No order found for the matching item(s).")
+            st.info("No product found for the matching item(s).")
 
     else:
         st.error("No item(s) found please try again")
@@ -163,36 +164,36 @@ with st.container(border=True):
                 st.success(f"{selected_item["name"]} is successfully restocked")
                 st.success(f"New Stock: {selected_item["stock"]}")
 
-# Section 4: Manage Orders (Delete/Cancel)
-st.header("Manage Orders")
+# Section 4: Deleting Discontinued Items (Delete/Cancel)
+st.header("Deleting Discontinued Items")
 with st.container(border=True):
-    orders = st.session_state.get("orders", [])
+    products = st.session_state.get("products", [])
 
-    if len(orders) == 0:
-        st.info("No orders found")
+    if len(products) == 0:
+        st.info("No products found")
 
     else:
-        order_id = []
-        for order in orders:
-            if order["status"] == "Placed":
-                order_id.append(order["order_id"])
+        product_id = []
+        for product in products:
+            if product["status"] == "Placed":
+                product_id.append(product["product_id"])
 
-        if len(order_id) == 0:
-            st.info("No active orders to cancel")
+        if len(product_id) == 0:
+            st.info("No active products to cancel")
 
         else:
-            selected_order = st.selectbox("Select Order", order_id, key="cancel_order")
-            btn_cancel = st.button("Cancel Order")
+            selected_product = st.selectbox("Select Product", product_id, key="cancel_change")
+            btn_cancel = st.button("Cancel Change")
 
             if btn_cancel:
                 cancelled = False
 
-                for order in orders:
-                    if order["order_id"] == selected_order and order["status"] == "Placed":
-                        order["status"] = "Cancelled"
+                for product in products:
+                    if product["product_id"] == selected_product and product["status"] == "Placed":
+                        product["status"] = "Cancelled"
 
                         for item in inventory:
-                            if item["name"] == order["item"]:
+                            if item["name"] == product["item"]:
                                 item["stock"] += 1
                                 break
 
@@ -203,7 +204,7 @@ with st.container(border=True):
                     with json_file.open("w", encoding="utf-8") as f:
                         json.dump(inventory, f, indent=4)
 
-                    st.session_state["orders"] = orders
-                    st.success(f"Order {selected_order} cancelled and stock refunded")
+                    st.session_state["products"] = products
+                    st.success(f"Product {selected_product} cancelled and change is reversed")
                 else:
-                    st.warning("Order was already cancelled or not found")
+                    st.warning("Product was already cancelled or not found")
