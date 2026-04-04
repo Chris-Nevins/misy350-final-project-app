@@ -48,6 +48,19 @@ if json_path_inventory.exists():
     with json_path_inventory.open("r", encoding= "utf-8") as f:
         inventory = json.load(f)
 
+products = [
+    {
+    "product_id": "product_101", 
+    "item": "AMD Ryzen 7 7800X3D CPU",
+    "category": "Processor", 
+    "total": 1350,
+    "user_type": "Owner",
+    "status": "Changed"
+    }
+]
+
+if "products" not in st.session_state:
+    st.session_state["products"] = products
 
 if st.session_state["role"] == "Employee":
     if st.session_state["page"] == "home":
@@ -57,6 +70,14 @@ if st.session_state["role"] == "Employee":
             st.rerun()
     elif st.session_state["page"] == "dashboard":
         st.markdown("Dashboard")
+
+        if st.button("Log out", type="primary", use_container_width=True):
+            st.session_state["logged_in"] = False
+            st.session_state["user"] = None
+            st.session_state["role"] = None
+            st.session_state["page"] = "login"
+            time.sleep(4)
+            st.rerun()
 
         tab1, tab2, tab3 = st.tabs(["Catalog", "Daily Sales", "Inventory"])
 
@@ -70,16 +91,21 @@ if st.session_state["role"] == "Employee":
             st.empty()
 
 elif st.session_state["role"] == "Owner":
-    st.markdown("Welcome! This is the Owner dashboard")
-    if st.button("Log out", type="primary", use_container_width=True):
-        st.session_state["logged_in"] = False
-        st.session_state["user"] = None
-        st.session_state["role"] = None
-        st.session_state["page"] = "login"
-        time.sleep(4)
-        st.rerun()
+    if st.session_state["page"] == "home":
+        st.markdown("Welcome! This is the Owner dashboard")
+        if st.button("Go to Dashboard", key= "dashboard_view_btn", type= "primary", use_container_width=True):
+            st.session_state["page"] = "dashboard"
+            st.rerun()
     elif st.session_state["page"] == "dashboard":
         st.markdown("Dashboard")
+
+        if st.button("Log out", type="primary", use_container_width=True):
+            st.session_state["logged_in"] = False
+            st.session_state["user"] = None
+            st.session_state["role"] = None
+            st.session_state["page"] = "login"
+            time.sleep(4)
+            st.rerun()
 
         tab1, tab2 = st.tabs(["Adding or Deleting Items", "Pricing and Restock"])
 
@@ -98,9 +124,9 @@ else:
     
         if st.button("Log In", type="primary", use_container_width=True):
             with st.spinner("Logging in..."):
-                time.sleep(2) # Fake backend delay
+                time.sleep(2) 
             
-                # Find user
+                
                 found_user = None
                 for user in users:
                     if user["email"].strip().lower() == email_input.strip().lower() and user["password"] == password_input:
@@ -119,7 +145,7 @@ else:
                 else:
                     st.error("Invalid credentials")
 
-    # Registration
+  
     st.subheader("Create a New account")
     with st.container(border=True):
         new_email = st.text_input("Email", key="email_register")
@@ -127,13 +153,12 @@ else:
     
         if st.button("Create Account", key= "register_btn"):
             with st.spinner("Creating account..."):
-                time.sleep(2) # Fake backend delay
-                # ... (Assume validation logic here) ...
+                time.sleep(2) 
                 users.append({
                     "id": str(uuid.uuid4()),
                     "email": new_email,
                     "password": new_password,
-                    "role": "Instructor"
+                    "role": "Employee"
                 })
 
                 with open(json_path, "w") as f:

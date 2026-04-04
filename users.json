@@ -1,1 +1,10 @@
-[{"id": "1", "email": "admin@school.edu", "full_name": "System Admin", "password": "123ssag@43AE", "role": "Admin", "registerd_at": "..."}, {"id": "5da8ad56-77bf-411c-8e8d-1535f496d4c1", "email": "teach@school.edu", "password": "1234", "role": "Instructor"}, {"id": "669b65a7-31b4-43e7-9230-c4691ae5f984", "email": "lmm@gmail.com", "password": "123", "role": "Instructor"}]
+[{"id": "1", 
+"email": "owner@precishw.com", 
+"full_name": "Shop Owner", 
+"password": "123", 
+"role": "Owner"}, 
+{"id":"2",
+"email": "john@precishw.com",
+"full_name": "Employee",
+"password": "987",
+"role": "Employee"}]
