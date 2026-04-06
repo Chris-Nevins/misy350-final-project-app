@@ -3,7 +3,7 @@
         "id": 1,
         "name": "Intel Core i7-13700K CPU",
         "category": "Processor",
-        "price": 389.99,
+        "price": 399.0,
         "stock": 15
     },
     {
@@ -103,5 +103,12 @@
         "category": "Networking",
         "price": 49.99,
         "stock": 16
+    },
+    {
+        "id": 16,
+        "name": "GTX 980ti",
+        "category": "GPU",
+        "price": 198,
+        "stock": 2
     }
 ]

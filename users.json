@@ -1,10 +1,1 @@
-[{"id": "1", 
-"email": "owner@precishw.com", 
-"full_name": "Shop Owner", 
-"password": "123", 
-"role": "Owner"}, 
-{"id":"2",
-"email": "john@precishw.com",
-"full_name": "Employee",
-"password": "987",
-"role": "Employee"}]
+[{"id": "1", "email": "owner@precishw.com", "full_name": "Shop Owner", "password": "123", "role": "Owner"}, {"id": "2", "email": "john@precishw.com", "full_name": "Employee", "password": "987", "role": "Employee"}, {"id": "e1bd367e-8683-48c7-971e-a43958f0bb2f", "email": "cnevins@precishw.com", "password": "345", "role": "Employee"}]
