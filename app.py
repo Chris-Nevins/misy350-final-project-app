@@ -20,6 +20,14 @@ st.title("Precision Hardware")
 # C. Role-Based Routing
 #=============================
 
+#=============================
+# D. JSON-Based Data Storage
+#=============================
+
+#=============================
+# E. CRUD System
+#=============================
+
 
 if "logged_in" not in st.session_state:
     st.session_state["logged_in"] = False
@@ -341,8 +349,12 @@ elif st.session_state["role"] == "Owner":
                             break
                     
                     if discontinued_name:
-                        st.write("Selected Item Details:")
-                        st.write(discontinued_name)
+                        st.write("### Selected Item Details:")
+                        st.write(f"**Item ID**: {discontinued_name["id"]}")
+                        st.write(f"**Name**: {discontinued_name["name"]}")
+                        st.write(f"**Category**: {discontinued_name["category"]}")
+                        st.write(f"**Price**: {discontinued_name["price"]}")
+                        st.write(f"**Stock**: {discontinued_name["stock"]}")
 
                         btn_delete = st.button("Delete Item")
 
@@ -427,14 +439,3 @@ with st.sidebar:
     if st.session_state["logged_in"] == True:
         user = st.session_state["user"]
         st.markdown(f"Logged User Email: {user["email"]}")
-
-
-#=============================
-# D. JSON-Based Data Storage
-#=============================
-
-#=============================
-# E. CRUD System
-#=============================
-
-
