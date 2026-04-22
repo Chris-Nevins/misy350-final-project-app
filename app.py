@@ -182,8 +182,10 @@ elif st.session_state["role"] == "Owner":
 
                     btn_change = st.button("Submit Change")
                     if btn_change:
-                        if not User_Type:
-                            st.error("Please enter your name")
+                        if User_Type.replace(" ","").strip().lower() == "Owner".lower():
+                            st.error("Please retype to confirm your user role")
+                        elif User_Type == "":
+                            st.error("Please enter your user role")
                         elif selected_name is None:
                             st.error("Please select an item")
                         elif Quantity > selected_name["stock"]:
