@@ -41,13 +41,16 @@ if "role" not in st.session_state:
 if "page" not in st.session_state:
     st.session_state["page"] = "login"
 
+#Users
 users = []
 
 json_path = Path("users.json")
+
 if json_path.exists():
     with open(json_path, "r") as f:
         users = json.load(f)
 
+#Inventory
 inventory = []
 
 json_path_inventory = Path("inventory.json")
@@ -56,20 +59,18 @@ if json_path_inventory.exists():
     with json_path_inventory.open("r", encoding= "utf-8") as f:
         inventory = json.load(f)
 
-products = [
-   {
-   "product_id": "Product_101",
-   "item": "AMD Ryzen 7 7800X3D CPU",
-   "category": "Processor",
-   "total": 1350,
-   "user_type": "Owner",
-   "status": "Changed"
-   }
-]
+#Product Log (might need to change the wordings)
+product_log = []
+
+json_path_product_log = Path("product_log.json")
+
+if json_path_product_log.exists():
+    with json_path_product_log.open("r", encoding= "utf-8") as f:
+        product_log = json.load(f)
 
 
-if "products" not in st.session_state:
-   st.session_state["products"] = products
+if "product_log" not in st.session_state:
+   st.session_state["product_log"] = product_log
 
 if st.session_state["role"] == "Employee":
     if st.session_state["page"] == "home":
@@ -121,7 +122,7 @@ if st.session_state["role"] == "Employee":
                     total_stock = sum(i["stock"] for i in viewing_inventory)#
                     st.metric("Total Stock", total_stock)
 
-                low_stock_items = [i for i in viewing_inventory if i["stock"] < 10]
+                low_stock_items = [i for i in viewing_inventory if i["stock"] < 5]
                 if low_stock_items:
                     st.warning("Low stock on the following items:")
                     st.dataframe(low_stock_items, use_container_width= True)
@@ -129,9 +130,9 @@ if st.session_state["role"] == "Employee":
                     st.success("All items are in sufficient stock")
                     
                 matching_products = []
-                for product in st.session_state["products"]:
+                for product in st.session_state["product_log"]:
                     for item in viewing_inventory:
-                        if product["item"] == item["name"]:
+                        if product["Item"] == item["name"]:
                             matching_products.append(product)        
                             break
 
@@ -139,10 +140,49 @@ if st.session_state["role"] == "Employee":
             with st.container(border=True):
                 st.header("Daily Sales")
                 if matching_products:
-                    st.subheader("Product(s) sold/returned/restocked")
                     st.dataframe(matching_products, use_container_width= True)
                 else:
                     st.info("No product found for the matching item(s).")
+
+            with st.container(border=True):
+                st.header("Deduct from Inventory")
+
+                sold_items = []
+                for sold in product_log:
+                    sold_items.append(sold["Item"])
+
+                Sel_Name = st.selectbox("Select sold item", sold_items)
+
+                sel_sale = []
+                for sale in product_log:
+                    if sale["Item"] == Sel_Name:
+                        sel_sale = sale
+                        break
+
+                sel_inv = []
+                for item in inventory:
+                    if item["name"] == Sel_Name:
+                        sel_inv = item
+                        break
+
+                if sel_sale and sel_inv:
+                    st.write(f"Quantity Sold: {sel_sale["Amount sold"]}")
+                    st.write(f"Current Inventory: {sel_inv["stock"]}")
+
+                    Deduct_btn = st.button("Edit Inventory")
+
+                    if Deduct_btn:
+                        sel_inv["stock"] -= sel_sale["Amount sold"]
+
+                        with json_path_inventory.open("w", encoding= "utf-8") as f:
+                            json.dump(inventory, f, indent=4)
+
+                        st.success("Inventory Changed")
+                        st.write(f"New Inventory: {sel_inv["stock"]}")
+
+                else:
+                    st.error("Unable to find an item that matches from Inventory or Product Log")
+                                
 
 elif st.session_state["role"] == "Owner":
     if st.session_state["page"] == "home":
@@ -167,62 +207,73 @@ elif st.session_state["role"] == "Owner":
             # Section 1: Add New Product (Create)
             if st.header("Add New Product"):
                 with st.container(border=True):
-                    item_names = []
-                    for item in inventory:
-                        item_names.append(item["name"])
-                    Selected_Item_Name = st.selectbox("Select", item_names)
+                    # Item ID
+                    New_ID = st.number_input("Set an Unique Numerical ID", step = 1.0, format="%.f")
 
-                    selected_name = {}
-                    for item in inventory:
-                        if item["name"] == Selected_Item_Name:
-                            selected_name = item
-                            break
+                    # Item Name
+                    New_Item_Name = st.text_input("Name")
 
-                    Quantity = st.number_input("Insert quantity", placeholder= "Please enter amount", step=1)
-                    User_Type = st.text_input("Name", placeholder= "Name")
+                    # Item Category
+                    Current_Cat = ["","GPU", "Memory", "Motherboard", "Processor", "Power Supply", "Case", "Cooling", "Networking"]
+                    New_Cat = st.selectbox("Category", Current_Cat)
 
-                    btn_change = st.button("Submit Change")
-                    if btn_change:
-                        if User_Type.replace(" ","").strip().lower() == "Owner".lower():
-                            st.error("Please retype to confirm your user role")
-                        elif User_Type == "":
-                            st.error("Please enter your user role")
-                        elif selected_name is None:
-                            st.error("Please select an item")
-                        elif Quantity > selected_name["stock"]:
-                            st.error("Out of Stock")
-                        elif Quantity == 0:
-                            st.error("Please enter the amount")                
+                    # Item Price
+                    New_Price = st.number_input("Insert Price", min_value=0.0, step=1.0, format="%.2f")
+
+                    # Item Stock
+                    New_Stock = st.number_input("Amount to inventory", min_value=0.0, step=1.0, format="%.f")
+
+
+                    btn_add = st.button("Submit Change")
+
+                    if btn_add:
+                        errors = []
+
+                        # duplicate ID
+                        for item_id in inventory:
+                            if New_ID == item_id["id"]:
+                                errors.append("That ID has already been taken")
+                                break
+
+                        # duplicate name
+                        for item_name in inventory:
+                            if New_Item_Name.replace(" ", "").strip().lower() == item_name["name"].replace(" ", "").strip().lower():
+                                errors.append("That Item already exists, please use restock inventory instead")
+                                break
+                        # Confirm empty name
+                        if New_Item_Name.strip() == "":
+                            errors.append("Please enter a name")
+
+                        # Confirm Category
+                        if New_Cat == "":
+                            errors.append("Please select a category")
+                            
+                        # Confirm Price
+                        if New_Price <= 0:
+                            errors.append("Please enter a price")
+
+                        # Confirm Stock
+                        if New_Stock <= 0:
+                            errors.append("Please enter a quantity")
+                        
+                        if errors:
+                            for error in errors:
+                                st.error(error)
                         else:
-                            selected_name["stock"] -= Quantity
+                            New_Inventory = {
+                                "id": int(New_ID),
+                                "name": New_Item_Name,
+                                "category": New_Cat,
+                                "price": float(New_Price),
+                                "stock": int(New_Stock)
+                                }
 
-                            with open(json_path_inventory, "w") as f:
+                            inventory.append(New_Inventory)
+
+                            with json_path_inventory.open("w", encoding= "utf-8") as f:
                                 json.dump(inventory, f, indent=4)
 
-                            total_price = selected_name["price"] * Quantity
-
-                            new_product_id = f"Product_{len(st.session_state['products']) + 101}"
-
-                            new_product = {
-                                "product_id":new_product_id,
-                                "item":selected_name["name"],
-                                "user_type":User_Type,
-                                "total":("{:.2f}".format(total_price)),
-                                "status":"Changed"
-                            }
-                            products.append(new_product)
-
-                            st.session_state["products"].append(new_product)
-
-                            st.success("Product Changed")
-
-                            with st.expander("View Item Record"):
-                                st.write(f"Product ID: {new_product['product_id']}")
-                                st.write(f"Item: {new_product['item']}")
-                                st.write(f"Type of User: {new_product['user_type']}")
-                                st.write(f"Total: {new_product['total']}")
-                                st.write(f"Status: {new_product['status']}")
-
+                            st.success("New Product Added")
 
             # Section 2: Update Prices (Read)
             st.header("Update Prices")
@@ -293,50 +344,6 @@ elif st.session_state["role"] == "Owner":
                             st.success(f"New Stock: {selected_item["stock"]}")
 
             # Section 4: Deleting Discontinued Items (Delete/Cancel)
-            st.header("Cancel Request")
-            with st.container(border=True):
-                products = st.session_state.get("products", [])
-
-                if len(products) == 0:
-                    st.info("No products found")
-
-                else:
-                    product_id = []
-                    for product in products:
-                        if product["status"] == "Changed":
-                            product_id.append(product["product_id"])
-
-                    if len(product_id) == 0:
-                        st.info("No active products to cancel")
-
-                    else:
-                        selected_product = st.selectbox("Select Product ID", product_id, key="cancel_change")
-                        btn_cancel = st.button("Cancel Change")
-
-                        if btn_cancel:
-                            cancelled = False
-
-                            for product in products:
-                                if product["product_id"] == selected_product and product["status"] == "Changed":
-                                    product["status"] = "Cancelled"
-
-                                    for item in inventory:
-                                        if item["name"] == product["item"]:
-                                            item["stock"] += 1
-                                            break
-
-                                    cancelled = True
-                                    break
-
-                            if cancelled:
-                                with json_path_inventory.open("w", encoding="utf-8") as f:
-                                    json.dump(inventory, f, indent=4)
-
-                                st.session_state["products"] = products
-                                st.success(f"Product {selected_product} cancelled and change is reversed")
-                            else:
-                                st.warning("Product was already cancelled or not found")
-
             st.header("Delete Discontinued Item(s)")
             with st.container(border=True):
                 with st.container(border=True):
