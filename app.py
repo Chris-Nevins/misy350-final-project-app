@@ -86,7 +86,7 @@ if st.session_state["role"] == "Employee":
             st.session_state["user"] = None
             st.session_state["role"] = None
             st.session_state["page"] = "login"
-            time.sleep(4)
+            time.sleep(1)
             st.rerun()
 
         tab1, tab2, tab3 = st.tabs(["Catalog", "Inventory", "Daily Sales"])
@@ -128,6 +128,8 @@ if st.session_state["role"] == "Employee":
                     st.dataframe(low_stock_items, use_container_width= True)
                 else:
                     st.success("All items are in sufficient stock")
+                    time.sleep(3)
+                    st.rerun()
                     
                 matching_products = []
                 for product in st.session_state["product_log"]:
@@ -179,6 +181,8 @@ if st.session_state["role"] == "Employee":
 
                         st.success("Inventory Changed")
                         st.write(f"New Inventory: {sel_inv["stock"]}")
+                        time.sleep(3)
+                        st.rerun()
 
                 else:
                     st.error("Unable to find an item that matches from Inventory or Product Log")
@@ -274,6 +278,8 @@ elif st.session_state["role"] == "Owner":
                                 json.dump(inventory, f, indent=4)
 
                             st.success("New Product Added")
+                            time.sleep(1)
+                            st.rerun()
 
             # Section 2: Update Prices (Read)
             st.header("Update Prices")
@@ -301,6 +307,8 @@ elif st.session_state["role"] == "Owner":
                             json.dump(inventory, f, indent=4)
 
                         st.success(f"Price for {selected_item['name']} updated to ${new_price:.2f}")
+                        time.sleep(1)
+                        st.rerun()
 
                 if filtered_inventory:
                     st.subheader("Current Inventory")
@@ -342,6 +350,8 @@ elif st.session_state["role"] == "Owner":
 
                             st.success(f"{selected_item["name"]} is successfully restocked")
                             st.success(f"New Stock: {selected_item["stock"]}")
+                            time.sleep(1)
+                            st.rerun()
 
             # Section 4: Deleting Discontinued Items (Delete/Cancel)
             st.header("Delete Discontinued Item(s)")
@@ -388,6 +398,8 @@ elif st.session_state["role"] == "Owner":
                             st.session_state["products"] = updated_products
 
                             st.success(f"{Selected_dis_product} was deleted successfully")
+                            time.sleep(1)
+                            st.rerun()
 
 else:
         # --- LOGIN ---
@@ -467,6 +479,7 @@ else:
                         json.dump(users, f)
 
                     st.success("Account created!")
+                    time.sleep(1)
                     st.rerun()
         st.write("---")
         st.dataframe(users)
@@ -474,7 +487,8 @@ else:
 
 
 with st.sidebar:
-    st.markdown("Inventory Manager Sidebar")
+    st.subheader("**Account Info**")
     if st.session_state["logged_in"] == True:
         user = st.session_state["user"]
-        st.markdown(f"Logged User Email: {user["email"]}")
+        st.markdown(f"User Email: {user["email"]}")
+        st.markdown(f"Logged In as: {user["role"]}")
